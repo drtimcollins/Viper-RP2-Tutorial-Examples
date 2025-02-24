@@ -42,8 +42,8 @@ def quadratic(z : ptr32):           # Bytearray, z, is passed as a 'pointer' to 
         z[n] = (n*(n - 3) + 2)
 
                                     # Create the bytearray buffer. It will store values as
-z = bytearray(4*10000)              # 32-bit integers so 4 bytes per value are needed
-quadratic(z)                        # Call the Viper function
+zBuffer = bytearray(4*10000)        # 32-bit integers so 4 bytes per value are needed
+quadratic(zBuffer)                  # Call the Viper function to fill the buffer.
 ```
 
 Although the code looks more verbose than the list comprehension version, the use of the Viper code emitter reduces the execution time down to 4.5&nbsp;ms, over 16 times faster.
