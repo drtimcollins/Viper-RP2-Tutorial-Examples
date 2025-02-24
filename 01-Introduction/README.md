@@ -27,26 +27,31 @@ The factorisation means only one multiplication is needed per iteration and the 
 
 ## The Viper Code Emitter
 
-To use the Viper code emitter for a function, you *just* need to add the decorator:
+To use the [Viper code emitter](https://docs.micropython.org/en/v1.9.3/pyboard/reference/speed_python.html#the-viper-code-emitter) for a function, you *just* need to add the decorator:
 
 ```
 @micropython.viper
 ```
 
-To actually get your function to work, and to work well, there will usually be a bit more work involved. The most fundamental issue is that viper does not function with regular Python objects like lists, it only knows about bits, bytes and words (i.e. integers). To represent a list of integers, you'll need to allocate a block of memory for your Viper function to write into. A near complete example is:
+To actually get your function to work, and to work well, there will usually be a bit more work involved. The most fundamental issue is that viper does not function with regular Python objects like lists, it only knows about bits, bytes and words (i.e. integers). To represent a list of integers, you'll need to allocate a block of memory for your Viper function to write into. A near-complete example is:
 
 ```
 @micropython.viper                  # Invoke Viper code emitter for this function
-def quadratic():
-    zMem = ptr32(z)                 # Store the memory address of z in zMem as a 'pointer'
+def quadratic(z : ptr32):           # Bytearray, z, is passed as a 'pointer' to the memory address of the bytearray
     for n in range(10000):          # Perform the calculation for 10000 values of n
-        zMem[n] = (n*(n - 3) + 2)
+        z[n] = (n*(n - 3) + 2)
 
-# Create the bytearray buffer. It will store values as 32-bit integers so 4 bytes per value are needed
-z = bytearray(4*10000)
-quadratic()                         # Call the Viper function
+                                    # Create the bytearray buffer. It will store values as
+z = bytearray(4*10000)              # 32-bit integers so 4 bytes per value are needed
+quadratic(z)                        # Call the Viper function
 ```
 
+Although the code looks more verbose than the list comprehension version, the use of the Viper code emitter reduces the execution time down to 4.5&nbsp;ms, over 16 times faster.
 
+### Pointers
 
-https://docs.micropython.org/en/v1.9.3/pyboard/reference/speed_python.html#the-viper-code-emitter
+The only part of the function above that will look alien to Python coders is the type hint of *ptr32* specified for the function argument, *z*. The ptr32 type is used to tell the compiler that the buffer, z, should be treated as a sequence of 32-bit integers, the *n*-th of which can be accessed using the index syntax: z[n]. It works much like a pointer in C/C++ code. Other pointer types that can be useful are ptr16 and ptr8 which are used to reference arrays of 16- or 8-bit integers respectively.
+
+> [!TIP]
+> Most (probably all) calculations use 32-bit arithmetic so it is often simplest and fastest to use 32-bit arrays unless you have an application-specific need to use a different size or have concerns about running out of memory.
+
