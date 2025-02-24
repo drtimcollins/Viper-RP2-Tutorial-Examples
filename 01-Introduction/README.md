@@ -42,8 +42,9 @@ def quadratic():
     for n in range(10000):          # Perform the calculation for 10000 values of n
         zMem[n] = (n*(n - 3) + 2)
 
+# Create the bytearray buffer. It will store values as 32-bit integers so 4 bytes per value are needed
 z = bytearray(4*10000)
-quadratic()
+quadratic()                         # Call the Viper function
 ```
 
 
