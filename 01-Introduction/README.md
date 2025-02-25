@@ -50,7 +50,7 @@ Although the code looks more verbose than the list comprehension version, the us
 
 ### Pointers
 
-The only part of the function above that will look alien to Python coders is the type hint of *ptr32* specified for the function argument, *z*. The ptr32 type is used to tell the compiler that the buffer, z, should be treated as a sequence of 32-bit integers, the *n*-th of which can be accessed using the familiar indexing syntax: z[n]. It works much like a pointer in C/C++ code. Other pointer types that can be useful are ptr16 and ptr8 which are used to reference arrays of 16- or 8-bit integers respectively.
+The only part of the function above that will look alien to Python coders is the type hint of **ptr32** specified for the function argument, **z**. The **ptr32** type is used to tell the compiler that the buffer, z, should be treated as a sequence of 32-bit integers, the *n*-th of which can be accessed using the familiar indexing syntax: z[n]. It works much like a [pointer in C/C++ code](https://www.w3schools.com/c/c_pointers_arrays.php). Other pointer types that can be useful are **ptr16** and **ptr8** which are used to reference arrays of 16- or 8-bit integers respectively.
 
 > [!TIP]
 > Most (probably all) calculations will actually be done using 32-bit arithmetic so it is often simplest and fastest to use 32-bit arrays unless you have an application-specific need to use a different size or have concerns about running out of memory.
@@ -71,13 +71,13 @@ zBuffer = bytearray(4*10000)        # 32-bit integers so 4 bytes per value are n
 quadratic(zBuffer)                  # Call the Viper function to fill the buffer.
 ```
 
-By avoiding the **range()** function and sticking entirely with Viper 32-bit integers this version cuts the execution time down to 3.9&nbsp;ms.
+By avoiding the **range()** function and sticking entirely with Viper 32-bit integers this version cuts the execution time down to 3.7&nbsp;ms.
 
 > [!TIP]
 > In general, avoid calling functions at all in Viper functions. Stick to primitive operations that microprocessors can do quickly such as basic arithmetic and logical functions. Conditional statements like **if** and **while** are fine but avoid **for** loops - they require an iterable Python object and will bring unnecessary overhead compared with simpler, but probably more verbose, code.
 
 ## Interacting with MicroPython
-The functions above store results as a sequence of 32-bit integers in a bytearray object which is not the easiest thing to interpret outside of the Viper function. There are several ways of unpacking data like this, I think the easiest to use is via the **uctypes.struct** function. This function allows your MicroPython code to access a buffer object like a bytearray using a data format specification equivalent to a struct in C. In this case, the structure contains just one item - an array of int32s and the code required to access the data is:
+The functions above store results as a sequence of 32-bit integers in a bytearray object which is not the easiest thing to interpret outside of the Viper function. There are several ways of unpacking data like this, I think the easiest to use is via the [**uctypes.struct**](https://docs.micropython.org/en/latest/library/uctypes.html) class. This class allows your MicroPython code to access a buffer object like a bytearray using a data format specification equivalent to a struct in C. In this case, the structure contains just one item - an array of int32s and the code required to access the data is:
 
 ```
 zBufferStruct = uctypes.struct(uctypes.addressof(zBuffer),
