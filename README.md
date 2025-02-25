@@ -7,6 +7,6 @@ The official documentation is quite sparse and this guide is intended to fill in
 Most will also work with other [MicroPython platforms](https://micropython.org/download/), but some of the examples will make use of RP2-specific components such as the hardware divider and interpolator for even greater speed-ups.
 
 ## Contents:
-1. Simple example - calculating a quadratic function for a range of values.
+1. [Simple example - calculating a quadratic function for a range of values.](./01-Introduction/)
 2. Hardware divider *(RP2-specific)*
 3. Input and output parameters
