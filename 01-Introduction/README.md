@@ -12,7 +12,7 @@ z = []
 for n in range(10000):
 	z.append(n*n - 3*n + 2)
 ```
-Running on a Raspberry Pi Pico (RP2040) this takes just over 200&nbsp;ms. A faster and more compact equivalent using list comprehension is:
+Running on a Raspberry Pi Pico v1 (RP2040) this takes just over 200&nbsp;ms. A faster and more compact equivalent using list comprehension is:
 
 ```
 z = [n*n - 3*n + 2 for n in range(10000)]
@@ -71,15 +71,27 @@ zBuffer = bytearray(4*10000)        # 32-bit integers so 4 bytes per value are n
 quadratic(zBuffer)                  # Call the Viper function to fill the buffer.
 ```
 
-By avoiding the **range()** function and sticking entirely with 32-bit integers this version cuts the execution time down to **??????????????????????**.
+By avoiding the **range()** function and sticking entirely with Viper 32-bit integers this version cuts the execution time down to 3.9&nbsp;ms.
 
 > [!TIP]
 > In general, avoid calling functions at all in Viper functions. Stick to primitive operations that microprocessors can do quickly such as basic arithmetic and logical functions. Conditional statements like **if** and **while** are fine but avoid **for** loops - they require an iterable Python object and will bring unnecessary overhead compared with simpler, but probably more verbose, code.
 
 ## Interacting with MicroPython
+The functions above store results as a sequence of 32-bit integers in a bytearray object which is not the easiest thing to interpret outside of the Viper function. There are several ways of unpacking data like this, I think the easiest to use is via the **uctypes.struct** function. This function allows your MicroPython code to access a buffer object like a bytearray using a data format specification equivalent to a struct in C. In this case, the structure contains just one item - an array of int32s and the code required to access the data is:
 
+```
+zBufferStruct = uctypes.struct(uctypes.addressof(zBuffer),
+                 {'data': (uctypes.ARRAY, 10000 | uctypes.INT32)})
+z = zBufferStruct.data
+```
 
+You can now use the variable z to access elements of the array using the regular indexing syntax. For example, to check the 20th value in the array:
 
-> Using uctypes to read the array in uPython
+```
+print(z[20])         # Should display the number 342 (20*(20 - 3) + 2)
+```
 
-> Full example
+## Complete Example
+The script, [01-Introduction.py](./01-Introduction.py), provides a complete working example of the code above with comparisons of execution time for the regular MicroPython and Viper versions of the calculation.
+
+This example should run on any [MicroPython supported platform](https://micropython.org/download/). This includes the emulators such as [wokwi.com](https://wokwi.com/) using [RP2040](https://wokwi.com/projects/new/micropython-pi-pico) or [ESP32](https://wokwi.com/projects/new/micropython-esp32) processors.
