@@ -74,7 +74,7 @@ quadratic(zBuffer)                  # Call the Viper function to fill the buffer
 By avoiding the **range()** function and sticking entirely with Viper 32-bit integers this version cuts the execution time down to 3.7&nbsp;ms.
 
 > [!TIP]
-> In general, avoid calling functions at all in Viper functions. Stick to primitive operations that microprocessors can do quickly such as basic arithmetic and logical functions. Conditional statements like **if** and **while** are fine but avoid **for** loops - they require an iterable Python object and will bring unnecessary overhead compared with simpler, but probably more verbose, code.
+> In general, avoid calling functions at all from within Viper functions. Stick to primitive operations that microprocessors can do quickly such as basic arithmetic and logical functions. Conditional statements like **if** and **while** are fine but avoid **for** loops - they require an iterable Python object and will bring unnecessary overhead compared with simpler, but probably more verbose, code.
 
 ## Interacting with MicroPython
 The functions above store results as a sequence of 32-bit integers in a bytearray object which is not the easiest thing to interpret outside of the Viper function. There are several ways of unpacking data like this, I think the easiest to use is via the [**uctypes.struct**](https://docs.micropython.org/en/latest/library/uctypes.html) class. This class allows your MicroPython code to access a buffer object like a bytearray using a data format specification equivalent to a struct in C. In this case, the structure contains just one item - an array of int32s and the code required to access the data is:
@@ -92,6 +92,6 @@ print(z[20])         # Should display the number 342 (20*(20 - 3) + 2)
 ```
 
 ## Complete Example
-The script, [01-Introduction.py](./01-Introduction.py), provides a complete working example of the code above with comparisons of execution time for the regular MicroPython and Viper versions of the calculation.
+The script, [01-Introduction.py](Examples/01-Introduction.py), provides a complete working example of the code above with comparisons of execution time for the regular MicroPython and Viper versions of the calculation.
 
 This example should run on any [MicroPython supported platform](https://micropython.org/download/). This includes the emulators such as [wokwi.com](https://wokwi.com/) using [RP2040](https://wokwi.com/projects/new/micropython-pi-pico) or [ESP32](https://wokwi.com/projects/new/micropython-esp32) processors.
