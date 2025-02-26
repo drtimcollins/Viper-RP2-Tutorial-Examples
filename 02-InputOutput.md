@@ -6,7 +6,7 @@ Just like any other MicroPython function, you can pass arguments to the function
 - `uint`: 32 bit unsigned integers
 - `bool`: boolean, True or False
 
-Note that `int` is not the same as a Python integer in that its range is limited to 32-bits. whereas Python integers have a, theoretically, limitless range of possible values.
+Note that `int` is not the same as a Python integer in that its range is limited to 32-bits, whereas Python integers have a, theoretically, limitless range of possible values.
 
 ## Type Hints
 Unlike normal MicroPython functions, you need to specify the data type of arguments and return values of functions. For example, the simple function below may look perfectly reasonable but will not work if you try to execute the script.
@@ -80,7 +80,7 @@ There are a few [limitations about how variables are passed to Viper functions:]
 
 
 ## Example
-The file, 02-InputOutput.py, demonstrates several examples of passing different data types to and from Viper functions.
+The script, [02-InputOutput.py](02-InputOutput.py), demonstrates several examples of passing different data types to and from Viper functions.
 
 This example should run on any [MicroPython supported platform](https://micropython.org/download/). This includes the emulators such as [wokwi.com](https://wokwi.com/) using [RP2040](https://wokwi.com/projects/new/micropython-pi-pico) or [ESP32](https://wokwi.com/projects/new/micropython-esp32) processors.
 

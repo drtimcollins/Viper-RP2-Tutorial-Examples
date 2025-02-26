@@ -20,7 +20,7 @@ print(getLongWord(buf))     # Prints 305419896 (0x12345678 in hex - all 4 bytes)
 # Multiple parameters, x and y are ints, z is a pointer to an array of bytes. Return value is boolean.
 @micropython.viper
 def multiParameterFunction(x : int, y : int, z : ptr8) -> bool:
-    b = (x == z[0] and y == z[1])
+    b = (x == z[0] and y == z[1])       # z[0] and z[1] will be converted to int32 types for this comparison.
     return b
 
 z = bytes(b'\x02\x04')                  # Two bytes, 2 and 4
