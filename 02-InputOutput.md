@@ -34,6 +34,7 @@ def addOne(x : int) -> int:
 
 print(addOne(4))
 ```
+
 The only change is on the second line in the function definition. The input argument, x, is specifically declared as an `int` type and the return value is also declared as an `int` using the `-> int` syntax. Without this, the compiler expects both x and the return value to be Python objects rather than the machine-level 32-bit integers that they really are.
 
 ## Pointers
@@ -66,6 +67,7 @@ print(getByte(buf))         # Prints 120 (0x78 in hex - the first byte in buf)
 print(getShortWord(buf))    # Prints 22136 (0x5678 in hex - the first 2 bytes)
 print(getLongWord(buf))     # Prints 305419896 (0x12345678 in hex - all 4 bytes)
 ```
+
 > [!NOTE]
 > When buffers are interpreted as multi-byte words (`ptr16` or `ptr32`), the bytes are read in [little-endian format](https://developer.mozilla.org/en-US/docs/Glossary/Endianness) meaning the first byte in the list is the least significant and the last byte is the most significant.
 
