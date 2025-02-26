@@ -1,5 +1,8 @@
+# Division
 
-NEED TO CHECK ON REAL DEVICE TO SEE IF DELAYS ARE NEEDED!
+The instruction set of the ARM Cortex-M0+ cores used in processors like the RP2040 contain operations to add, subtract and multiply numbers, but not to divide them. As a result, division operations can be considerably more time-consuming and, as a general rule, should be avoided if at all possible.
+
+# Todo: Compare with delays included...
 
 Example: divide a sequence of numbers all by 7
 

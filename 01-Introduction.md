@@ -90,6 +90,8 @@ You can now use the variable z to access elements of the array using the regular
 ```python
 print(z[20])         # Should display the number 342 (20*(20 - 3) + 2)
 ```
+> [!NOTE]
+> You can get the same functionality by using the **array.array** class. This takes a long time to set up the array initially, but if you are reusing the same block of memory many times (e.g. in a streaming application), this should not cause any performance issues.
 
 ## Complete Example
 The script, [01-Introduction.py](Examples/01-Introduction.py), provides a complete working example of the code above with comparisons of execution time for the regular MicroPython and Viper versions of the calculation.
