@@ -105,8 +105,10 @@ def setPin():
 setPin()
 ```
 
-## Example
+## Example (RP2040 Only)
 
-Example using GPIO
+The example script, [03-Hardware.py](03-Hardware.py), compares two approaches to the simple task of serially transmitting the bits in a 32-bit word. The first method uses the standard MicroPython `machine.Pin` class whereas the second realises the same functionality using the Viper code emitter and directly accessing the GPIO registers. Using a Raspberry Pi Pico v1 platform, version 1 transmits the 32 bits in 440.8 microseconds whereas version 2 takes only 8.1 microseconds, i.e. 54 times faster. 
 
-Notes about using DMA and/or PIO instead of Viper bit-banging.
+> [!NOTE]
+> This is not how I would do this with the RP2040 in practice. A much better approach that is faster, uses less processing overhead, and achieves accurate and predictable timing is to use the [PIO controller]() (this is outside the scope of this tutorial).
+
