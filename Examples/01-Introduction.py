@@ -9,15 +9,15 @@ z0 = [n*(n - 3) + 2 for n in range(10000)]
 t1 = time.ticks_us()                            # Log end/start time
 
 # Viper code emitter will be used just for the function, quadratic()
-@micropython.viper                  # Invoke Viper code emitter for this function
-def quadratic(z : ptr32):           # Bytearray, z, is passed as a 'pointer' to the memory address of the bytearray
+@micropython.viper                              # Invoke Viper code emitter for this function
+def quadratic(z : ptr32):                       # Bytearray, z, is passed as a 'pointer' to the memory address of the bytearray
     n = 0
-    while n < 10000:                # Perform the calculation for 10000 values of n
+    while n < 10000:                            # Perform the calculation for 10000 values of n
         z[n] = (n*(n - 3) + 2)
         n += 1
-                                    # Create the bytearray buffer. It will store values as
-zBuffer = bytearray(4*10000)        # 32-bit integers so 4 bytes per value are needed
-quadratic(zBuffer)                  # Call the Viper function to fill the buffer.
+                                                # Create the bytearray buffer. It will store values as
+zBuffer = bytearray(4*10000)                    # 32-bit integers so 4 bytes per value are needed
+quadratic(zBuffer)                              # Call the Viper function to fill the buffer.
 
 zBufferStruct = uctypes.struct(uctypes.addressof(zBuffer),
                  {'data': (uctypes.ARRAY, 10000 | uctypes.INT32)})
@@ -33,5 +33,5 @@ print(f"z[20] for the MicroPython version = {z0[20]}")
 print(f"z[20] for the Viper version       = {z1[20]}")
 print("Checking all elements...")
 for n in range(10000):
-    assert z0[n]==z1[n]                     # Will raise an AssertionError if mismatched
+    assert z0[n]==z1[n]                         # Will raise an AssertionError if mismatched
 print("...all correct.")

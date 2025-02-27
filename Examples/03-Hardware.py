@@ -9,16 +9,16 @@ GPIO_OUT_SET = const(0x0014 >> 2)       # Divide by 4, ptr32 indexes in 4-byte w
 GPIO_OUT_CLR = const(0x0018 >> 2)
 
 p = Pin(0, Pin.OUT, value = 1)
-time.sleep(0.1)
+time.sleep_us(100)
 
 # Method 1. Uses standard MicroPython machine.Pin class methods
 def sendWordPinClass(data):
-    for n in range(32):                     # Iterate through 32 bits
+    for n in range(32):                 # Iterate through 32 bits
         if data & 0x01 == 0:
-            p.off()                         # Clear pin 0
+            p.off()                     # Clear pin 0
         else:
-            p.on()                          # Set pin 0
-        data = data >> 1                    # Shift data 1 bit to the right 
+            p.on()                      # Set pin 0
+        data = data >> 1                # Shift data 1 bit to the right 
     p.on()
 
 # Method 2. Accesses GPIO registers directly using Viper code emitter

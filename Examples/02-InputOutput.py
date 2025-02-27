@@ -1,21 +1,21 @@
 import time
 time.sleep(0.1)
 
-buf = bytes(b'\x78\x56\x34\x12')     # An array of four bytes
+buf = bytes(b'\x78\x56\x34\x12')        # An array of four bytes
 
 @micropython.viper
-def getByte(x : ptr8) -> int:        # Treat the input as a buffer of bytes
+def getByte(x : ptr8) -> int:           # Treat the input as a buffer of bytes
     return x[0]
 @micropython.viper
-def getShortWord(x : ptr16) -> int:  # Treat the input as a buffer of 16-bit words
+def getShortWord(x : ptr16) -> int:     # Treat the input as a buffer of 16-bit words
     return x[0]
 @micropython.viper
-def getLongWord(x : ptr32) -> int:   # Treat the input as a buffer of 32-bit words
+def getLongWord(x : ptr32) -> int:      # Treat the input as a buffer of 32-bit words
     return x[0]
 
-print(getByte(buf))         # Prints 120 (0x78 in hex - the first byte in buf)
-print(getShortWord(buf))    # Prints 22136 (0x5678 in hex - the first 2 bytes)
-print(getLongWord(buf))     # Prints 305419896 (0x12345678 in hex - all 4 bytes)
+print(getByte(buf))                     # Prints 120 (0x78 in hex - the first byte in buf)
+print(getShortWord(buf))                # Prints 22136 (0x5678 in hex - the first 2 bytes)
+print(getLongWord(buf))                 # Prints 305419896 (0x12345678 in hex - all 4 bytes)
 
 # Multiple parameters, x and y are ints, z is a pointer to an array of bytes. Return value is boolean.
 @micropython.viper

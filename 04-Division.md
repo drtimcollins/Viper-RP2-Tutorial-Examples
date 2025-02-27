@@ -17,3 +17,6 @@ Example: Compare // 7 with hardware divider
 
 [04-Division.py](Examples/04-Division.py)
 
+Viper-only version took 6902 us
+
+Using HW divider took   4501 us
