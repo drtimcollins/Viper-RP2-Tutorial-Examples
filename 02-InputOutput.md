@@ -80,7 +80,7 @@ There are a few [limitations about how variables are passed to Viper functions:]
 
 
 ## Example
-The script, [02-InputOutput.py](02-InputOutput.py), demonstrates several examples of passing different data types to and from Viper functions.
+The script, [02-InputOutput.py](Examples/02-InputOutput.py), demonstrates several examples of passing different data types to and from Viper functions.
 
 This example should run on any [MicroPython supported platform](https://micropython.org/download/). This includes the emulators such as [wokwi.com](https://wokwi.com/) using [RP2040](https://wokwi.com/projects/new/micropython-pi-pico) or [ESP32](https://wokwi.com/projects/new/micropython-esp32) processors.
 
