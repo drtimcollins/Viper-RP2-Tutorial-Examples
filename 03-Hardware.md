@@ -40,6 +40,7 @@ from machine import Pin, mem32
 p = Pin(0, Pin.OUT)
 mem32[0x3FF44000 + 0x0008] = 1    # Sets bit zero of the GPIO_OUT_W1TS_REG register
 ```
+
 > [!NOTE]
 > This example still uses the `machine.Pin` class to set the pin up as an output. This could be done by writing to the GPIO configuration register(s) instead but, since it only needs doing once, there is unlikely to be any significant performance gain this way.
 
