@@ -11,4 +11,5 @@ Some will also work with other [MicroPython platforms](https://micropython.org/d
 2. [Input and output parameters](02-InputOutput.md)
 3. [Hardware registers](03-Hardware.md)
 4. [Hardware divider *(RP2-specific)*](04-Division.md)
+5. [Hardware interpolator *(RP2-specific)*](05-Interpolator.md)
 

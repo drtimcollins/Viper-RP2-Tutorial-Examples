@@ -41,13 +41,14 @@ p = Pin(0, Pin.OUT)
 mem32[0x3FF44000 + 0x0008] = 1    # Sets bit zero of the GPIO_OUT_W1TS_REG register
 ```
 > [!NOTE]
-> The pin is still setup as an output using the `machine.Pin` class. This could be done by writing to the GPIO configuration register(s) instead but, since it only needs doing once, there is unlikely to be any significant performance gain this way.
+> This example still uses the `machine.Pin` class to set the pin up as an output. This could be done by writing to the GPIO configuration register(s) instead but, since it only needs doing once, there is unlikely to be any significant performance gain this way.
 
 To make the code more readable, I recommend using the MicroPython `const` function to create 'labels' pointing to the register addresses:
 
 ```python
 # RP2040 GPIO Hardware Register Access
-from machine import Pin, mem32, const
+from machine import Pin, mem32
+from micropython import const
 SIO_BASE = const(0xD0000000)
 GPIO_OUT_SET = const(SIO_BASE + 0x0014)
 
@@ -57,7 +58,8 @@ mem32[GPIO_OUT_SET] = 1
 
 ```python
 # ESP32 GPIO Hardware Register Access
-from machine import Pin, mem32, const
+from machine import Pin, mem32
+from micropython import const
 GPIO = const(0x3FF44000)
 GPIO_OUT_W1TS_REG = const(GPIO + 0x0008)
 
@@ -70,7 +72,8 @@ Accessing hardware registers from Viper functions is most easily achieved using 
 
 ```python
 # RP2040 GPIO Hardware Register Access
-from machine import Pin, mem32, const
+from machine import Pin
+from micropython import const
 SIO_BASE = const(0xD0000000)
 GPIO_OUT_SET = const(0x0014 >> 2)       # Divide by 4, ptr32 indexes in 4-byte words
 
@@ -78,7 +81,7 @@ p = Pin(0, Pin.OUT)
 
 @micropython.viper
 def setPin():
-    sio = mem32(SIO_BASE)           # Address of the register bank's start
+    sio = ptr32(SIO_BASE)           # Address of the register bank's start
     sio[GPIO_OUT_SET] = 1           # Index to the specific register
 
 setPin()
@@ -86,7 +89,8 @@ setPin()
 
 ```python
 # ESP32 GPIO Hardware Register Access
-from machine import Pin, mem32, const
+from machine import Pin
+from micropython import const
 GPIO = const(0x3FF44000)
 GPIO_OUT_W1TS_REG = const(0x0008 >> 2)  # Divide by 4, ptr32 indexes in 4-byte words
 
@@ -94,11 +98,12 @@ p = Pin(0, Pin.OUT)
 
 @micropython.viper
 def setPin():
-    gpio = mem32(GPIO)              # Address of the register bank's start
+    gpio = ptr32(GPIO)              # Address of the register bank's start
     gpio[GPIO_OUT_W1TS_REG] = 1     # Index to the specific register
 
 setPin()
 ```
+
 ## Example
 
 Example using GPIO
