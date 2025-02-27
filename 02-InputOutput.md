@@ -75,7 +75,7 @@ print(getLongWord(buf))     # Prints 305419896 (0x12345678 in hex - all 4 bytes)
 
 There are a few [limitations about how variables are passed to Viper functions:](https://docs.micropython.org/en/v1.9.3/pyboard/reference/speed_python.html#the-viper-code-emitter)
 - Functions may have up to four arguments. *If you need to pass more, put the values in a buffer.*
-- Default argument values are not permitted. *Not generally a problem.*
+- Default argument values are not permitted. *This is not, generally, a problem.*
 - Floating point may be used but is not optimised. *I would not recommend using any floating point arithmetic*
 
 
