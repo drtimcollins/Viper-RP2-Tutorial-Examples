@@ -6,21 +6,50 @@ The potential functionality of the interpolators is not terribly easy to untangl
 
 ## Shifting, Masking and Sign-Extension
 
-The [RP2040 datasheet diagram](https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf#page=34) illustrates a block diagram of the interpolators showing that they consist of two 'lanes', each of which can perform a sequence of three operations: right-shifting, masking, and sign-extension. Right-shifting takes all the bits in the register and moves them a set number of bits, $N$, to the right; equivalent to dividing by $2^N$. Masking selects a range of bits and sets all others to zero. Sign extension takes the most-significant bit of the masked bits and copies it to all of the, now-zero, bits to the left. If signed integers are being used, this ensures that negative values are still recognised as negative after the operation.
+The [RP2040 datasheet diagram](https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf#page=34) illustrates a block diagram of the interpolators showing that they consist of two 'lanes', each of which can perform a sequence of operations: right-shifting, masking, sign-extension, and addition. Right-shifting takes all the bits in the register and moves them a set number of bits, $N$, to the right; equivalent to dividing by $2^N$. Masking selects a range of bits and sets all others to zero. Sign extension takes the most-significant bit of the masked bits and copies it to all of the, now-zero, bits to the left. If signed integers are being used, this ensures that negative values are still recognised as negative after the operation. The final stage is addition with another register, BASE0 or BASE1 depending on the lane.
 
-The figure below shows an example of these operations with a right-shift of 5 bits, mask of bits 2 to 19 and sign-extension.
+The figure below shows an example of the first three operations with a right-shift of 5 bits, mask of bits 2 to 19 and sign-extension.
 
 ![Diagram of Shift, Mask, and Sign Extension.](Images/bitShift.svg)
 
+As an example, let's imagine we want to do the operations above on the input number, 0x13579BDE, and then add the result to the number 0x00054DCE. A regular Python/MicroPython script to do this would be:
 
-Point to manual for 'full' diagram.
+```python
+a = 0x13579BDE
 
-Main processing blocks in each lane...
+a = a >> 5                      # Right shift by 5 bits (result = 0x009ABCDE)
+a = a & 0x000FFFFC              # Bitwise AND sets all bits other than bits 2-19 to zero (result = 0x000ABCDC)
+if (a & 0x00080000) != 0:       # Sign-extension, if bit 19 is high, convert to a negative integer (result = -0x00054324)
+    a = (a | 0xFFF00000) - 0x100000000
+a = a + 0x00054DCE              # Finally, add 0x00054DCE
+print(f"{a:08X}")               # The result, should be 0x00000AAA
+```
+Using the hardware interpolator, all of the steps above can be computed in a single clock cycle.
+[SIO: INTERP0_CTRL_LANE0 register](https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf#page=55)
 
-Example 0x1234ABCD
 
-Shift by 2, mask bottom two bits, sign-extend. Show all steps and do same thing all at once in interpolator.
 
+```python
+from micropython import const
+
+SIO_BASE       = const(0xd0000000)
+INTERP0_ACCUM0 = const(0x080 >> 2)      # Read/write access to accumulator 0
+INTERP0_BASE0  = const(0x088 >> 2)      # Read/write access to BASE0 register.
+INTERP0_PEEK_LANE0 = const(0x0a0 >> 2)  # Read LANE0 result, without altering any internal state (PEEK).
+INTERP0_CTRL_LANE0 = const(0x0ac >> 2)  # Control register for lane 0
+
+@micropython.viper
+def shiftMaskSignEx(a : int) -> int:
+    sio = ptr32(SIO_BASE)
+    sio[INTERP0_CTRL_LANE0] = 0x0000CC45
+    sio[INTERP0_BASE0] = 0x00054DCE
+    sio[INTERP0_ACCUM0] = a
+    return sio[INTERP0_PEEK_LANE0]
+
+a = 0x13579BDE
+a = shiftMaskSignEx(a)
+print(f"{a:08X}")
+```
 
 ## Interpolation
 
