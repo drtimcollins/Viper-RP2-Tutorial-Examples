@@ -1,4 +1,4 @@
-# Division
+# Division on the RP2040
 
 The instruction set of the ARM Cortex-M0+ cores used in processors like the RP2040 contain operations to add, subtract and multiply numbers, but not to divide them. As a result, division operations can be considerably more time-consuming and, as a general rule, should be avoided if at all possible. However, the RP2040 does incorporate a solution to this shortcoming of the M0 core by including a hardware divider peripheral as part of the Single-cycle IO block (SIO). This is used by C compilers and, presumably, MicroPython to speed up integer division operations already but there are still cases where direct access to the hardware divider can yield additional performance gains.
 
@@ -53,3 +53,6 @@ The example above will not give any performance advantage over simply using the 
 An example of how the hardware divider can give a modest increase in speed is given in example [04-Division.py](Examples/04-Division.py). The example shows two ways of writing a Viper function to divide a sequence of integers by the same number, 7. Because the divisor does not change, it only needs to be written once at the start of the iteration. Also, instead of waiting for the result, the script calculates the next value of the array index, `n`, which takes just long enough for a valid result to be available.
 
 When tested with a Raspberry Pi Pico v1, the Viper-only version of the function took 5816&nbsp;us to perform the 10000 calculations whereas the hardware divider version took 3872&nbsp;us.
+
+>[!NOTE]
+> The hardware divider is not present on the more recent RP2350 because the Cortex-M33 and the Hazard3 processor cores both feature division operations in their instruction sets. A hardware divider is of no use to these processors.
