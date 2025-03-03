@@ -90,4 +90,4 @@ print("Software result     =", -1000+(147*(2000+1000))//256)
 ### Example: Lookup table
 
 
-[^1] MicroPython uses two different internal format for representing integers. One is SMALLINT which represents signed numbers up to 31 bits, the other is the regular Python infinite-precision integer. Literal values in Viper functions that can be respresented as a SMALLINT are automatically cast as Viper ints, larger numbers need deliberately casting from a Python object to an int. So, any literal value greater than ±0x3FFFFFFF must be cast as an int to avoid a ViperTypeError at runtime.
+[^1]: MicroPython uses two different internal format for representing integers. One is SMALLINT which represents signed numbers up to 31 bits, the other is the regular Python infinite-precision integer. Literal values in Viper functions that can be respresented as a SMALLINT are automatically cast as Viper ints, larger numbers need deliberately casting from a Python object to an int. So, any literal value greater than ±0x3FFFFFFF must be cast as an int to avoid a ViperTypeError at runtime.
