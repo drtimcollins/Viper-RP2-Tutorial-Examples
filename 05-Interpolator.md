@@ -61,7 +61,18 @@ print(f"{a:08X}")                       # The result, should be 0x00000AAA
 
 Note that it may look like there are still quite a few operations involved. However, assuming you need to do the same calculation on a long sequence of values, the only thing that would need repeating is the write to INTERP0_ACCUM0 and then reading from INTERP0_PEEK_LANE0; the setting up operations would only need performing once at the start.
 
-## Interpolation
+## Linear Interpolation
+
+The interpolators can also be used to perform actual linear interpolation! Both lanes are used for this process. Interpolation, or 'blend', mode is activated by setting bit 21 of the lane 0 control register high. The effect will be that the result from lane 1 will equal $x_0+\alpha(x_1-x_0)$ where $x_0$ is the register, BASE0, $x_1$ is the register, BASE1, and $\alpha$ is the interpolation factor, $0\leqslant\alpha<1$, set as the value of the least significant byte of ACCUM1 // 256.
+
+To set up interpolation mode:
+
+- Bit 21 of INTERP0_CTRL_LANE0 must be high. The shift, mask and sign extension bits seem to be unused and can be left at zero, i.e. INTERP0_CTRL_LANE0 = 0x00200000.
+- The shift and mask bits of INTERP0_CTRL_LANE1 act on the interpolation blend factor, $\alpha$. To avoid unexpected behaviour, set the mask range to be 0-7.
+- The sign-extension bit of INTERP0_CTRL_LANE1 (bit 15) sets whether the values for $x_0$ and $x_1$ should be interpretted as signed (1) or unsigned (0).
+- i.e. For signed interpolation, INTERP0_CTRL_LANE1 = 0x00009c00, for unsigned, INTERP0_CTRL_LANE1 = 0x00001c00.
+
+The example, below, shows a signed implementation of the interpolator.
 
 ```python
 from micropython import const
@@ -76,9 +87,9 @@ INTERP0_PEEK_LANE1 = const(0x0a4 >> 2) 	# Read LANE1 result, without altering an
 @micropython.viper
 def interpolate(x : int, y : int , a : int) -> int:
     sio = ptr32(SIO_BASE)
-    sio[INTERP0_CTRL_LANE0] = 0x00207c00    # Set Blend bit, Mask = full width
-    sio[INTERP0_CTRL_LANE1] = 0x0000fc00    # Set Signed bit, Mask = full width
-    sio[INTERP0_BASE0] = x                  # Linear inperpolation between x and y according to blend
+    sio[INTERP0_CTRL_LANE0] = 0x00200000    # Set Blend bit, mask etc. bits are unused for lane 0
+    sio[INTERP0_CTRL_LANE1] = 0x00009c00    # Set Signed bit, Mask = full width (bits 0-31)
+    sio[INTERP0_BASE0] = x                  # Linear interpolation between x and y according to blend
     sio[INTERP0_BASE1] = y                  # factor, a.
     sio[INTERP0_ACCUM1] = a                 # Result = x + (a*(y-x))//256
     return sio[INTERP0_PEEK_LANE1]
@@ -90,4 +101,4 @@ print("Software result     =", -1000+(147*(2000+1000))//256)
 ### Example: Lookup table
 
 
-[^1]: MicroPython uses two different internal format for representing integers. One is SMALLINT which represents signed numbers up to 31 bits, the other is the regular Python infinite-precision integer. Literal values in Viper functions that can be respresented as a SMALLINT are automatically cast as Viper ints, but larger numbers will be interpretted as a Python object. So, any literal value greater than ±0x3FFFFFFF must be cast as an int using the `int()` function to avoid a ViperTypeError at runtime.
+[^1]: MicroPython uses two different internal format for representing integers. One is SMALLINT which represents signed numbers up to 31 bits, the other is the regular Python infinite-precision integer. Literal values in Viper functions that can be represented as a SMALLINT are automatically cast as Viper ints, but larger numbers will be interpreted as a Python object. So, any literal value greater than ±0x3FFFFFFF must be cast as an int using the `int()` function to avoid a ViperTypeError at runtime.
