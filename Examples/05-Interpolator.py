@@ -1,3 +1,7 @@
+# Example of generating a sine wave using the RP2 interpolator with a lookup table.
+# Copyright (c) 2025 Tim Collins - MIT License
+# See https://github.com/drtimcollins/Viper-RP2-Tutorial-Examples/blob/main/LICENSE
+
 from micropython import const
 import uctypes, array
 

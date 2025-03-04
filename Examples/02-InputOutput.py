@@ -1,3 +1,7 @@
+# Example of using Viper to access memory buffers as arrays of bytes, 16-bit words and 32-bit words.
+# Copyright (c) 2025 Tim Collins - MIT License
+# See https://github.com/drtimcollins/Viper-RP2-Tutorial-Examples/blob/main/LICENSE
+
 import time
 time.sleep(0.1)
 

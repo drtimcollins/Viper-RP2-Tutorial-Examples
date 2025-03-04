@@ -1,3 +1,7 @@
+# Example demonstrating the use of the hardware divider on the RP2040
+# Copyright (c) 2025 Tim Collins - MIT License
+# See https://github.com/drtimcollins/Viper-RP2-Tutorial-Examples/blob/main/LICENSE
+
 import time
 import uctypes
 

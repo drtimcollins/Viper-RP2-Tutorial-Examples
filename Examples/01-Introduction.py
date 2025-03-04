@@ -1,3 +1,7 @@
+# Simple example to demonstrate the speed-up of using Viper code emitter
+# Copyright (c) 2025 Tim Collins - MIT License
+# See https://github.com/drtimcollins/Viper-RP2-Tutorial-Examples/blob/main/LICENSE
+
 import time
 import uctypes
 
