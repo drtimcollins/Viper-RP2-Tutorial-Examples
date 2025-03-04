@@ -99,6 +99,6 @@ print("Software result     =", -1000+(147*(2000+1000))//256)
 ```
 
 ### Example: Lookup table
-The example script, [05-Interpolator.py](05-Interpolator.py) illustrates a typical application of the interpolator. A sine wave generator function fills a block of memory with samples calculated by interpolating a 32 entry lookup table. You will need a bigger table to get high quality sine waves but this example illustrates the principles. If you are using Thonny, try enabling the 'Plotter' view and you should see a single cycle of the generated sine wave.
+The example script, [05-Interpolator.py](Examples/05-Interpolator.py05-Interpolator.py) illustrates a typical application of the interpolator. A sine wave generator function fills a block of memory with samples calculated by interpolating a 32 entry lookup table. You will need a bigger table to get high quality sine waves but this example illustrates the principles. If you are using Thonny, try enabling the 'Plotter' view and you should see a single cycle of the generated sine wave.
 
 [^1]: MicroPython uses two different internal format for representing integers. One is SMALLINT which represents signed numbers up to 31 bits, the other is the regular Python infinite-precision integer. Literal values in Viper functions that can be represented as a SMALLINT are automatically cast as Viper ints, but larger numbers will be interpreted as a Python object. So, any literal value greater than ±0x3FFFFFFF must be cast as an int using the `int()` function to avoid a ViperTypeError at runtime.
