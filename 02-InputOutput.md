@@ -69,6 +69,7 @@ print(getLongWord(buf))     # Prints 305419896 (0x12345678 in hex - all 4 bytes)
 ```
 > [!CAUTION]
 > Internally, all Viper integers are stored as 32-bit numbers. When reading values from arrays using `ptr16` or `ptr8` pointers, the more significant bits will be set to zero which means that data will be treated as unsigned. Sign-extension will be required if you want to treat the input array as signed values ([the RP2 hardware interpolator can help with this](05-Interpolator.md)).
+
 > [!NOTE]
 > When buffers are interpreted as multi-byte words (`ptr16` or `ptr32`), the bytes are read in [little-endian format](https://developer.mozilla.org/en-US/docs/Glossary/Endianness) meaning the first byte in the list is the least significant and the last byte is the most significant.
 
